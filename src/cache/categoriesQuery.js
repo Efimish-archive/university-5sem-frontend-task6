@@ -1,9 +1,9 @@
-import { createCaregoriesApi } from '../api/categories'
+import { createCategoriesApi } from '../api/categories'
 import { useQuery } from '@tanstack/vue-query'
 import { computed } from 'vue'
 
 export function useCategories() {
-  const { getAll } = createCaregoriesApi()
+  const { getAll } = createCategoriesApi()
 
   const query = useQuery({
     queryKey: ['contents'],

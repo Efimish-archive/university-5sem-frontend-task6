@@ -1,6 +1,6 @@
 import axiosInstance from './axios'
 
-export const createCaregoriesApi = () => ({
+export const createCategoriesApi = () => ({
   getAll() {
     return axiosInstance.get('categories')
   },

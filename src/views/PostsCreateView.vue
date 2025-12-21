@@ -1,8 +1,28 @@
 <script setup>
 import PostForm from '@/components/PostForm.vue';
+import { useRouter } from 'vue-router';
+import { useMutation, useQueryClient } from '@tanstack/vue-query';
+import { createPostsApi } from '@/api/posts';
 
-function createPost({ name, content, image_url, category_id }) {
-  alert([name, content, image_url, category_id].join(", "));
+const router = useRouter();
+const queryClient = useQueryClient();
+const { post } = createPostsApi();
+
+const mutation = useMutation({
+  mutationFn: post,
+  onSuccess() {
+    queryClient.invalidateQueries({
+      queryKey: ['contents']
+    });
+    router.push("/posts");
+  },
+  onError(data) {
+    console.error(data);
+  }
+});
+
+function createPost(data) {
+  mutation.mutate(data);
 }
 </script>
 
