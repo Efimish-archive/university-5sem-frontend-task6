@@ -1,5 +1,45 @@
-<script setup></script>
+<script setup>
+import BaseTable from '@/components/BaseTable.vue';
+import { useCategories } from '@/cache/categoriesQuery';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const { data } = useCategories();
+
+const header = {
+  id: 'ID',
+  name: 'Имя',
+  actions: 'Действия',
+}
+
+function createCategory() {
+  router.push('/categories/create');
+}
+
+function editCategory(id) {
+  router.push(`/categories/${id}`);
+}
+
+function deleteCategory(id) {
+  if (!confirm(`Вы точно хотите удалить категорию #${id}?`)) return;
+  alert(`удаление ${id}...`);
+}
+</script>
 
 <template>
-  <h1>Categories</h1>
+  <div class="flex flex-col gap-4 items-center">
+    <h1 class="text-3xl">Список категорий</h1>
+    <div class="flex flex-col gap-1 text-black">
+      <button class="bg-green-400 p-2 rounded-lg cursor-pointer" @click="createCategory">Добавить новую
+        категорию</button>
+      <BaseTable :header="header" :rows="data">
+        <template #actions="{ row: { id } }">
+          <span class="flex gap-1 text-black">
+            <button class="bg-blue-400 p-2 rounded-lg cursor-pointer" @click="editCategory(id)">Редактировать</button>
+            <button class="bg-red-400 p-2 rounded-lg cursor-pointer" @click="deleteCategory(id)">Удалить</button>
+          </span>
+        </template>
+      </BaseTable>
+    </div>
+  </div>
 </template>

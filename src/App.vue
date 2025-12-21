@@ -3,14 +3,16 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header class="w-screen bg-gray-50 p-4 flex justify-center">
-    <nav class="flex gap-4 text-2xl">
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/categories">Categories</RouterLink>
-      <RouterLink to="/posts">Posts</RouterLink>
-    </nav>
-  </header>
-  <main class="w-screen p-4 flex justify-center items-center">
-    <RouterView />
-  </main>
+  <div class="w-screen h-screen bg-gray-900 text-gray-200">
+    <header class="w-full bg-gray-800 p-4 flex justify-center">
+      <nav class="flex gap-4 text-2xl">
+        <RouterLink to="/">Домой</RouterLink>
+        <RouterLink to="/categories">Категории</RouterLink>
+        <RouterLink to="/posts">Посты</RouterLink>
+      </nav>
+    </header>
+    <main class="w-screen p-4 flex flex-col justify-center items-center">
+      <RouterView />
+    </main>
+  </div>
 </template>
