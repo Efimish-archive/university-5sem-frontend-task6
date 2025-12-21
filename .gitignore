@@ -45,3 +45,6 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Other
+.other
