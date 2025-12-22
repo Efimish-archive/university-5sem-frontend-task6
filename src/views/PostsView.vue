@@ -20,13 +20,13 @@ function createPost() {
   router.push('/posts/create');
 }
 
-function editPost(id) {
-  router.push(`/posts/${id}`);
+function editPost(slug) {
+  router.push(`/posts/${slug}`);
 }
 
-function deletePost(id) {
-  if (!confirm(`Вы точно хотите удалить пост #${id}?`)) return;
-  alert(`удаление ${id}...`);
+function deletePost(slug) {
+  if (!confirm(`Вы точно хотите удалить пост #${slug}?`)) return;
+  alert(`удаление ${slug}...`);
 }
 </script>
 
@@ -37,10 +37,10 @@ function deletePost(id) {
       <button class="bg-green-400 p-2 rounded-lg cursor-pointer" @click="createPost">Добавить новый
         пост</button>
       <BaseTable :header="header" :rows="data">
-        <template #actions="{ row: { id } }">
+        <template #actions="{ row: { slug } }">
           <span class="flex gap-1 text-black">
-            <button class="bg-blue-400 p-2 rounded-lg cursor-pointer" @click="editPost(id)">Редактировать</button>
-            <button class="bg-red-400 p-2 rounded-lg cursor-pointer" @click="deletePost(id)">Удалить</button>
+            <button class="bg-blue-400 p-2 rounded-lg cursor-pointer" @click="editPost(slug)">Редактировать</button>
+            <button class="bg-red-400 p-2 rounded-lg cursor-pointer" @click="deletePost(slug)">Удалить</button>
           </span>
         </template>
       </BaseTable>

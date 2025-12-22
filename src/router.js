@@ -43,7 +43,7 @@ const router = createRouter({
       component: PostsCreateView,
     },
     {
-      path: '/posts/:id',
+      path: '/posts/:slug',
       name: 'posts-edit',
       component: PostsEditView,
     },

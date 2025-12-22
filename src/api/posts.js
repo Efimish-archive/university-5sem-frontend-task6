@@ -4,16 +4,16 @@ export const createPostsApi = () => ({
   getAll() {
     return axiosInstance.get('posts')
   },
-  get(id) {
-    return axiosInstance.get(`posts/${id}`)
+  get(slug) {
+    return axiosInstance.get(`posts/${slug}`)
   },
   post(payload) {
     return axiosInstance.post('posts', payload)
   },
-  put(id, payload) {
-    return axiosInstance.put(`posts/${id}`, payload)
+  put(slug, payload) {
+    return axiosInstance.put(`posts/${slug}`, payload)
   },
-  delete(id) {
-    return axiosInstance.delete(`posts/${id}`)
+  delete(slug) {
+    return axiosInstance.delete(`posts/${slug}`)
   },
 })

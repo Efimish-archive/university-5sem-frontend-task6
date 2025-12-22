@@ -6,7 +6,7 @@ export function usePosts() {
   const { getAll } = createPostsApi()
 
   const query = useQuery({
-    queryKey: ['contents'],
+    queryKey: ['posts'],
     select: (d) => d.data,
     queryFn: getAll,
     refetchOnWindowFocus: false,

@@ -1,5 +1,6 @@
 <script setup>
 import PostForm from '@/components/PostForm.vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { createPostsApi } from '@/api/posts';
@@ -12,13 +13,20 @@ const mutation = useMutation({
   mutationFn: post,
   onSuccess() {
     queryClient.invalidateQueries({
-      queryKey: ['contents']
+      queryKey: ['posts']
     });
     router.push("/posts");
   },
   onError(data) {
     console.error(data);
   }
+});
+
+const form = ref({
+  name: '',
+  content: '',
+  image_url: '',
+  category_id: 1
 });
 
 function createPost(data) {
@@ -29,6 +37,6 @@ function createPost(data) {
 <template>
   <div class="flex flex-col gap-4 items-center">
     <h1 class="text-3xl">Создать новый пост</h1>
-    <PostForm text="Добавить" @done="createPost" />
+    <PostForm text="Добавить" v-model="form" @done="createPost" />
   </div>
 </template>

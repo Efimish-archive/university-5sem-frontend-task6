@@ -6,7 +6,7 @@ export function useCategories() {
   const { getAll } = createCategoriesApi()
 
   const query = useQuery({
-    queryKey: ['contents'],
+    queryKey: ['categories'],
     select: (d) => d.data,
     queryFn: getAll,
     refetchOnWindowFocus: false,
