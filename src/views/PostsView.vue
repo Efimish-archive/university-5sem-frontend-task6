@@ -4,13 +4,13 @@ import { usePosts } from '@/cache/postsQuery';
 import { useRouter } from 'vue-router';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { createPostsApi } from '@/api/posts';
-// import { useCategories } from '@/cache/categoriesQuery';
+import { useCategories } from '@/cache/categoriesQuery';
 
 const router = useRouter();
 const queryClient = useQueryClient();
 const { data, refetch } = usePosts();
 const { delete_ } = createPostsApi();
-// const categories = useCategories();
+const categories = useCategories();
 
 const mutation = useMutation({
   mutationFn: delete_,
@@ -65,10 +65,9 @@ function deletePost(slug) {
         <template #image_url="{ value, row: { name } }">
           <img :src="value" :alt="name" width="128px">
         </template>
-        <!-- <template #category_id="{ value }">
-          {{ categories.isFetched && categories.data.value }}
-          {{ value }}
-        </template> -->
+        <template #category_id="{ value }">
+          {{categories.data.value?.find(c => c.id === value)?.name ?? '-'}}
+        </template>
       </BaseTable>
     </div>
   </div>
