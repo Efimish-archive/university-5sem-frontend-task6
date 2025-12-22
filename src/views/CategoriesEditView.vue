@@ -1,26 +1,23 @@
 <script setup>
 import CategoryForm from '@/components/CategoryForm.vue';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useRouteParams } from '@vueuse/router';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
+import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { createCategoriesApi } from '@/api/categories';
 import { watchEffect } from 'vue';
+import { useCategory } from '@/cache/categoriesQuery';
 
 const id = useRouteParams('id');
+const router = useRouter();
 const queryClient = useQueryClient();
-const { get, put } = createCategoriesApi();
+const { put } = createCategoriesApi();
 
 const form = ref({
   name: '',
 });
 
-const query = useQuery({
-  queryKey: ['categories', id],
-  queryFn: ({ queryKey }) => get(queryKey[1]),
-  select: (d) => d.data,
-  refetchOnWindowFocus: false,
-  staleTime: 1000 * 60,
-});
+const query = useCategory(id);
 
 watchEffect(() => {
   if (query.data.value) {
@@ -35,6 +32,7 @@ const mutation = useMutation({
     queryClient.invalidateQueries({
       queryKey: ['categories'],
     });
+    router.push("/categories");
   },
   onError(data) {
     console.error(data);

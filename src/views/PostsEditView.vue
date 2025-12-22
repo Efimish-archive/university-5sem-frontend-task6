@@ -1,15 +1,18 @@
 <script setup>
 import PostForm from '@/components/PostForm.vue';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useRouteParams } from '@vueuse/router';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
+import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { createPostsApi } from '@/api/posts';
 import { watchEffect } from 'vue';
 import { useCategories } from '@/cache/categoriesQuery';
+import { usePost } from '@/cache/postsQuery';
 
 const slug = useRouteParams('slug');
+const router = useRouter();
 const queryClient = useQueryClient();
-const { get, put } = createPostsApi();
+const { put } = createPostsApi();
 const { data: categories } = useCategories();
 
 const form = ref({
@@ -19,13 +22,7 @@ const form = ref({
   category_id: '',
 });
 
-const query = useQuery({
-  queryKey: ['posts', slug],
-  queryFn: ({ queryKey }) => get(queryKey[1]),
-  select: (d) => d.data,
-  refetchOnWindowFocus: false,
-  staleTime: 1000 * 60,
-});
+const query = usePost(slug);
 
 watchEffect(() => {
   if (query.data.value) {
@@ -43,6 +40,7 @@ const mutation = useMutation({
     queryClient.invalidateQueries({
       queryKey: ['posts'],
     });
+    router.push("/posts");
   },
   onError(data) {
     console.error(data);
