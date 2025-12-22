@@ -2,9 +2,26 @@
 import BaseTable from '@/components/BaseTable.vue';
 import { usePosts } from '@/cache/postsQuery';
 import { useRouter } from 'vue-router';
+import { useMutation, useQueryClient } from '@tanstack/vue-query';
+import { createPostsApi } from '@/api/posts';
 
 const router = useRouter();
-const { data } = usePosts();
+const queryClient = useQueryClient();
+const { data, refetch } = usePosts();
+const { delete_ } = createPostsApi();
+
+const mutation = useMutation({
+  mutationFn: delete_,
+  onSuccess() {
+    refetch();
+    queryClient.invalidateQueries({
+      queryKey: ['posts'],
+    });
+  },
+  onError(data) {
+    console.error(data);
+  },
+});
 
 const header = {
   id: 'ID',
@@ -26,7 +43,7 @@ function editPost(slug) {
 
 function deletePost(slug) {
   if (!confirm(`Вы точно хотите удалить пост #${slug}?`)) return;
-  alert(`удаление ${slug}...`);
+  mutation.mutate(slug);
 }
 </script>
 

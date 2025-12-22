@@ -13,7 +13,7 @@ export const createPostsApi = () => ({
   put(slug, payload) {
     return axiosInstance.put(`posts/${slug}`, payload)
   },
-  delete(slug) {
+  delete_(slug) {
     return axiosInstance.delete(`posts/${slug}`)
   },
 })

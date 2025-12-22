@@ -2,9 +2,26 @@
 import BaseTable from '@/components/BaseTable.vue';
 import { useCategories } from '@/cache/categoriesQuery';
 import { useRouter } from 'vue-router';
+import { useMutation, useQueryClient } from '@tanstack/vue-query';
+import { createCategoriesApi } from '@/api/categories';
 
 const router = useRouter();
-const { data } = useCategories();
+const queryClient = useQueryClient();
+const { data, refetch } = useCategories();
+const { delete_ } = createCategoriesApi();
+
+const mutation = useMutation({
+  mutationFn: delete_,
+  onSuccess() {
+    refetch();
+    queryClient.invalidateQueries({
+      queryKey: ['categories'],
+    });
+  },
+  onError(data) {
+    console.error(data);
+  },
+});
 
 const header = {
   id: 'ID',
@@ -22,7 +39,7 @@ function editCategory(id) {
 
 function deleteCategory(id) {
   if (!confirm(`Вы точно хотите удалить категорию #${id}?`)) return;
-  alert(`удаление ${id}...`);
+  mutation.mutate(id);
 }
 </script>
 

@@ -13,7 +13,7 @@ export const createCategoriesApi = () => ({
   put(id, payload) {
     return axiosInstance.put(`categories/${id}`, payload)
   },
-  delete(id) {
+  delete_(id) {
     return axiosInstance.delete(`categories/${id}`)
   },
 })
