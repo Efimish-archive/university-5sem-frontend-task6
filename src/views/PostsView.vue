@@ -4,11 +4,13 @@ import { usePosts } from '@/cache/postsQuery';
 import { useRouter } from 'vue-router';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { createPostsApi } from '@/api/posts';
+// import { useCategories } from '@/cache/categoriesQuery';
 
 const router = useRouter();
 const queryClient = useQueryClient();
 const { data, refetch } = usePosts();
 const { delete_ } = createPostsApi();
+// const categories = useCategories();
 
 const mutation = useMutation({
   mutationFn: delete_,
@@ -28,8 +30,8 @@ const header = {
   name: 'Имя',
   slug: 'Слаг',
   content: 'Контент',
-  image_url: 'Ссылка на картинку',
-  category_id: 'ID категории',
+  image_url: 'Картинка',
+  category_id: 'Категория',
   actions: 'Действия',
 }
 
@@ -60,6 +62,13 @@ function deletePost(slug) {
             <button class="bg-red-400 p-2 rounded-lg cursor-pointer" @click="deletePost(slug)">Удалить</button>
           </span>
         </template>
+        <template #image_url="{ value, row: { name } }">
+          <img :src="value" :alt="name" width="128px">
+        </template>
+        <!-- <template #category_id="{ value }">
+          {{ categories.isFetched && categories.data.value }}
+          {{ value }}
+        </template> -->
       </BaseTable>
     </div>
   </div>

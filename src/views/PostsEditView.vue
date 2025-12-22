@@ -5,16 +5,18 @@ import { useRouteParams } from '@vueuse/router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { createPostsApi } from '@/api/posts';
 import { watchEffect } from 'vue';
+import { useCategories } from '@/cache/categoriesQuery';
 
 const slug = useRouteParams('slug');
 const queryClient = useQueryClient();
 const { get, put } = createPostsApi();
+const { data: categories } = useCategories();
 
 const form = ref({
   name: '',
   content: '',
   image_url: '',
-  category_id: 1,
+  category_id: '',
 });
 
 const query = useQuery({
@@ -55,6 +57,6 @@ function editPost(payload) {
 <template>
   <div class="flex flex-col gap-4 items-center">
     <h1 class="text-3xl">Редактировать пост #{{ slug }}</h1>
-    <PostForm text="Сохранить" v-model="form" @done="editPost" />
+    <PostForm text="Сохранить" :categories="categories" v-model="form" @done="editPost" />
   </div>
 </template>

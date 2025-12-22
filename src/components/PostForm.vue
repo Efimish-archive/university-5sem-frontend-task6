@@ -4,6 +4,10 @@ defineProps({
     type: String,
     default: "Сохранить",
   },
+  categories: {
+    type: Array,
+    required: true,
+  }
 });
 
 const model = defineModel({
@@ -17,7 +21,6 @@ function done() {
   if (model.value.name.length < 1) return;
   if (model.value.content.length < 1) return;
   if (model.value.image_url.length < 1) return;
-  if (model.value.category_id < 1) return;
 
   emit('done', {
     name: model.value.name,
@@ -43,8 +46,10 @@ function done() {
       <input type="url" id="image_url" v-model="model.image_url" class="bg-gray-700 border-2 rounded-lg">
     </div>
     <div class="flex gap-4 items-center">
-      <label for="category_id" class="flex-1">ID Категории</label>
-      <input type="number" id="category_id" v-model="model.category_id" min="1" class="bg-gray-700 border-2 rounded-lg">
+      <label for="category_id" class="flex-1">Категория</label>
+      <select id="category_id" v-model="model.category_id" class="bg-gray-700 border-2 rounded-lg">
+        <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
+      </select>
     </div>
     <button type="submit" class="bg-green-400 p-2 rounded-lg cursor-pointer" @click.prevent="done">{{ text }}</button>
   </form>

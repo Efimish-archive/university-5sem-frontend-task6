@@ -4,10 +4,12 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { createPostsApi } from '@/api/posts';
+import { useCategories } from '@/cache/categoriesQuery';
 
 const router = useRouter();
 const queryClient = useQueryClient();
 const { post } = createPostsApi();
+const { data: categories } = useCategories();
 
 const mutation = useMutation({
   mutationFn: post,
@@ -37,6 +39,6 @@ function createPost(data) {
 <template>
   <div class="flex flex-col gap-4 items-center">
     <h1 class="text-3xl">Создать новый пост</h1>
-    <PostForm text="Добавить" v-model="form" @done="createPost" />
+    <PostForm text="Добавить" :categories="categories" v-model="form" @done="createPost" />
   </div>
 </template>

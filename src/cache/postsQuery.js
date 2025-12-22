@@ -7,8 +7,8 @@ export function usePosts() {
 
   const query = useQuery({
     queryKey: ['posts'],
-    select: (d) => d.data,
     queryFn: getAll,
+    select: (r) => r.data,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60,
   })
@@ -16,4 +16,18 @@ export function usePosts() {
   const count = computed(() => (query.data.value ?? []).length)
 
   return { ...query, count }
+}
+
+export function usePost(slug) {
+  const { get } = createPostsApi()
+
+  const query = useQuery({
+    queryKey: ['posts', slug],
+    queryFn: () => get(slug),
+    select: (r) => r.data,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60,
+  })
+
+  return query
 }

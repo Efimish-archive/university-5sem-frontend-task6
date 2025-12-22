@@ -7,8 +7,8 @@ export function useCategories() {
 
   const query = useQuery({
     queryKey: ['categories'],
-    select: (d) => d.data,
     queryFn: getAll,
+    select: (r) => r.data,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60,
   })
@@ -16,4 +16,18 @@ export function useCategories() {
   const count = computed(() => (query.data.value ?? []).length)
 
   return { ...query, count }
+}
+
+export function useCategory(id) {
+  const { get } = createCategoriesApi()
+
+  const query = useQuery({
+    queryKey: ['categories', id],
+    queryFn: () => get(id),
+    select: (r) => r.data,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60,
+  })
+
+  return query
 }
