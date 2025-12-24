@@ -1,8 +1,8 @@
 import axiosInstance from './axios'
 
 export const createPostsApi = () => ({
-  getAll() {
-    return axiosInstance.get('posts')
+  getAll(query = '') {
+    return axiosInstance.get(`posts?search=${query}`)
   },
   get(slug) {
     return axiosInstance.get(`posts/${slug}`)

@@ -1,6 +1,6 @@
 import { createCategoriesApi } from '../api/categories'
 import { useQuery } from '@tanstack/vue-query'
-import { computed } from 'vue'
+import { computed, toValue } from 'vue'
 
 export function useCategories() {
   const { getAll } = createCategoriesApi()
@@ -23,7 +23,7 @@ export function useCategory(id) {
 
   const query = useQuery({
     queryKey: ['categories', id],
-    queryFn: () => get(id),
+    queryFn: () => get(toValue(id)),
     select: (r) => r.data,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60,

@@ -36,7 +36,6 @@ watchEffect(() => {
 const mutation = useMutation({
   mutationFn: ({ slug, payload }) => put(slug, payload),
   onSuccess() {
-    query.refetch();
     queryClient.invalidateQueries({
       queryKey: ['posts'],
     });

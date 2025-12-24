@@ -1,24 +1,44 @@
 <script setup>
 import BaseTable from '@/components/BaseTable.vue';
-import { usePosts } from '@/cache/postsQuery';
-import { useRouter } from 'vue-router';
-import { useMutation, useQueryClient } from '@tanstack/vue-query';
+import { usePostsSearch } from '@/cache/postsQuery';
+import { useRoute, useRouter } from 'vue-router';
+import { useMutation } from '@tanstack/vue-query';
 import { createPostsApi } from '@/api/posts';
 import { useCategories } from '@/cache/categoriesQuery';
+import { computed, ref, watch } from 'vue';
+import { useDebounceFn } from '@vueuse/core';
 
 const router = useRouter();
-const queryClient = useQueryClient();
-const { data, refetch } = usePosts();
+const route = useRoute();
 const { delete_ } = createPostsApi();
 const categories = useCategories();
+
+const searchParam = computed(() => route.query.search ?? '');
+const searchQuery = ref(route.query.search ?? '');
+
+const updateSearch = useDebounceFn((value) => {
+  router.push({
+    query: value ? { search: value } : {},
+  })
+}, 500);
+
+function handleSearch() {
+  updateSearch(searchQuery.value);
+}
+
+watch(
+  () => route.query.search,
+  (newSearch) => {
+    searchQuery.value = newSearch || '';
+  },
+);
+
+const { data, refetch } = usePostsSearch(searchParam);
 
 const mutation = useMutation({
   mutationFn: delete_,
   onSuccess() {
     refetch();
-    queryClient.invalidateQueries({
-      queryKey: ['posts'],
-    });
   },
   onError(data) {
     console.error(data);
@@ -53,9 +73,10 @@ function deletePost(slug) {
   <div class="flex flex-col gap-4 items-center">
     <h1 class="text-3xl">Список постов</h1>
     <div class="flex flex-col gap-1 text-black">
+      <input type="text" class="bg-gray-700 border-2 rounded-lg text-white" v-model="searchQuery" @input="handleSearch">
       <button class="bg-green-400 p-2 rounded-lg cursor-pointer" @click="createPost">Добавить новый
         пост</button>
-      <BaseTable :header="header" :rows="data">
+      <BaseTable :header="header" :rows="data ?? []">
         <template #actions="{ row: { slug } }">
           <span class="flex gap-1 text-black">
             <button class="bg-blue-400 p-2 rounded-lg cursor-pointer" @click="editPost(slug)">Редактировать</button>

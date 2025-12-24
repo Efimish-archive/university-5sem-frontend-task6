@@ -2,11 +2,10 @@
 import BaseTable from '@/components/BaseTable.vue';
 import { useCategories } from '@/cache/categoriesQuery';
 import { useRouter } from 'vue-router';
-import { useMutation, useQueryClient } from '@tanstack/vue-query';
+import { useMutation } from '@tanstack/vue-query';
 import { createCategoriesApi } from '@/api/categories';
 
 const router = useRouter();
-const queryClient = useQueryClient();
 const { data, refetch } = useCategories();
 const { delete_ } = createCategoriesApi();
 
@@ -14,9 +13,6 @@ const mutation = useMutation({
   mutationFn: delete_,
   onSuccess() {
     refetch();
-    queryClient.invalidateQueries({
-      queryKey: ['categories'],
-    });
   },
   onError(data) {
     console.error(data);
